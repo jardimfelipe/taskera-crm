@@ -7,7 +7,6 @@ import { db } from "@/lib/db";
 const HomePage = async () => {
   const users = await db.user.findMany();
 
-  console.log(users);
   return (
     <main className="w-full h-screen pl-60 flex flex-col space-y-4 items-center justify-center">
       <div>Usuario</div>

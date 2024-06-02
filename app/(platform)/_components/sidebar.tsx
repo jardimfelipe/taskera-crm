@@ -1,4 +1,10 @@
-import { HomeIcon, LayoutList, UsersRound } from "lucide-react";
+import {
+  CircuitBoard,
+  HomeIcon,
+  LayoutList,
+  Settings,
+  UsersRound,
+} from "lucide-react";
 import Link from "next/link";
 import { DefaultSession } from "next-auth";
 import React from "react";
@@ -36,8 +42,8 @@ export const Sidebar = ({ user }: Props) => {
           className="w-full justify-start text-gray-400"
         >
           <Link href="/teams">
-            <UsersRound className="w-4 h-4 mr-2" />
-            Times
+            <CircuitBoard className="w-4 h-4 mr-2" />
+            Boards
           </Link>
         </Button>
 
@@ -47,8 +53,8 @@ export const Sidebar = ({ user }: Props) => {
           className="w-full justify-start text-gray-400"
         >
           <Link href="/teams">
-            <LayoutList className="w-4 h-4 mr-2" />
-            Times
+            <Settings className="w-4 h-4 mr-2" />
+            Configurações
           </Link>
         </Button>
       </div>
