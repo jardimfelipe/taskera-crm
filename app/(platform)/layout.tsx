@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, Suspense } from "react";
 
 import { auth } from "@/auth";
+import { db } from "@/lib/db";
 
 import { Header } from "./_components/header";
 import { Sidebar } from "./_components/sidebar";
@@ -9,15 +10,16 @@ import { Sidebar } from "./_components/sidebar";
 const Layout = async ({ children }: PropsWithChildren) => {
   const session = await auth();
 
-  if (!session) {
+  if (!session || !session.user) {
     redirect("/");
   }
+  console.log(session);
   return (
-    <div>
+    <Suspense fallback={<p>To vendo se tem usuário</p>}>
       <Header />
       <Sidebar user={session.user} />
       {children}
-    </div>
+    </Suspense>
   );
 };
 
