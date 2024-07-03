@@ -1,7 +1,8 @@
 import React, { PropsWithChildren } from "react";
 
 const Layout = async ({ children }: PropsWithChildren) => {
-  return <div>{children}</div>;
+  return children
+
 };
 
 export default Layout;

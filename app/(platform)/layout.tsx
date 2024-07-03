@@ -8,18 +8,18 @@ import { Header } from "./_components/header";
 import { Sidebar } from "./_components/sidebar";
 
 const Layout = async ({ children }: PropsWithChildren) => {
-  const session = await auth();
-
-  if (!session || !session.user) {
-    redirect("/");
-  }
-  console.log(session);
   return (
-    <Suspense fallback={<p>To vendo se tem usuário</p>}>
-      <Header />
-      <Sidebar user={session.user} />
-      {children}
-    </Suspense>
+    <>
+      <Sidebar />
+      <div className="ml-60 overflow-x-hidden">
+        <Header />
+        <main className="w-full h-[calc(100vh-3.5rem)] mt-14 p-4">
+          <div className="rounded-3xl bg-slate-100 h-full">
+            {children}
+          </div>
+        </main>
+      </div>
+    </>
   );
 };
 

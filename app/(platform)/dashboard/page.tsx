@@ -8,7 +8,7 @@ const HomePage = async () => {
   const users = await db.user.findMany();
 
   return (
-    <main className="w-full h-screen pl-60 flex flex-col space-y-4 items-center justify-center">
+    <div>
       <div>Usuario</div>
       <form
         action={async () => {
@@ -18,7 +18,7 @@ const HomePage = async () => {
       >
         <Button>Sair</Button>
       </form>
-    </main>
+    </div>
   );
 };
 
