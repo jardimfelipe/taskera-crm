@@ -44,7 +44,7 @@ export const Sidebar = async () => {
                 key={menu.href}
                 asChild
                 variant="ghost"
-                className="w-full justify-start text-black text-sm"
+                className="w-full justify-start text-muted-foreground font-normal text-sm"
               >
                 <Link href={menu.href}>
                   <menu.icon className="w-6 h-6 mr-2 text-primary" />
