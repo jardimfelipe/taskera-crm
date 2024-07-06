@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { currentUser } from '@/lib/auth';
 import { db } from '@/lib/db'
 import { redirect } from 'next/navigation';
-import React from 'react'
+import React, { Suspense } from 'react'
 import { ProjectsTable } from '../clients/[id]/_components/projects-card/projects-table';
 
 const Projects = async () => {
@@ -27,7 +27,9 @@ const Projects = async () => {
         <CardHeader className='flex flex-row items-end gap-2'>
         </CardHeader>
         <CardContent>
-          <ProjectsTable showClients projects={projects} />
+          <Suspense fallback={<p>carregando...</p>}>
+            <ProjectsTable showClients projects={projects} />
+          </Suspense>
         </CardContent>
       </Card>
     </div>
