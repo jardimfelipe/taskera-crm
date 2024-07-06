@@ -14,7 +14,7 @@ const Layout = async ({ children }: PropsWithChildren) => {
       <div className="ml-60 overflow-x-hidden">
         <Header />
         <main className="w-full h-[calc(100vh-3.5rem)] mt-14 p-4">
-          <div className="rounded-3xl bg-slate-100 h-full">
+          <div className="rounded-3xl bg-slate-100 h-full p-4">
             {children}
           </div>
         </main>

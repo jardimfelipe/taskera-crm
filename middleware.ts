@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 
 export const ROOT = "/";
 export const PUBLIC_ROUTES = ["/"];
-export const DEFAULT_REDIRECT = "/boards";
+export const DEFAULT_REDIRECT = "/home";
 
 export default auth((req) => {
   const { nextUrl } = req;

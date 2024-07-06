@@ -29,7 +29,7 @@ export const useAction = <TInput, TOutput>(
       setFieldErrors(undefined);
 
       try {
-        const result = await action(input);
+        const result = await action(input)
         if (!result) {
           return;
         }

@@ -5,9 +5,11 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/auth";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
-
-import { CreateUser } from "./schema";
 import { InputType, ReturnType } from "./types";
+import { DeleteClient } from "./schema";
+import { revalidatePath } from "next/cache";
+
+
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const googleUser = await currentUser();
@@ -17,17 +19,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: "Unauthorized",
     };
   }
-  let user;
-
+  console.log(data)
   try {
-    user = await db.user.create({ data });
+     await db.client.delete({ where: { id: data.id }});
   } catch (error) {
     return {
-      error: "Failed to create",
+      error: "Ocorreu um erro ao excluir o cliente. Por favor, tente novamente.",
     };
   }
-
-  redirect("/teams");
+  revalidatePath(`/clients`);
+  redirect(`/clients`)
 };
 
-export const createUser = createSafeAction(CreateUser, handler);
+export const deleteClient = createSafeAction(DeleteClient, handler);

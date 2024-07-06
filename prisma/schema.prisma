@@ -13,6 +13,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  IN_PROGRESS
+  PENDING
+  COMPLETED
+  NOT_STARTED
+}
+
 model User {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
@@ -56,9 +63,28 @@ model Task {
 }
 
 model Project {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
-  userId String @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tasks  Task[]
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+  client      Client?   @relation(fields: [clientId], references: [id])
+  clientId    String?   @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  startAt     DateTime
+  endAt       DateTime
+  status      Status    @default(NOT_STARTED)
+  description String
+  budget      Int
+}
+
+model Client {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  phone     String?
+  email     String?
+  projects  Project[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
