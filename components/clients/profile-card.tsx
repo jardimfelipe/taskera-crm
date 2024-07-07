@@ -14,8 +14,6 @@ type Props = {
 }
 
 export const ProfileCard = async ({ client }: Props) => {
-
-
   if (!client) redirect('/clients')
   return (
     <Card className="md:w-full lg:w-1/3">

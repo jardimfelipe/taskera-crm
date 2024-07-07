@@ -32,8 +32,8 @@ export const ProjectOverview = async ({ projectId }: Props) => {
                 <User className="w-6 h-6" />
               </div>
               <div className="flex flex-col gap-1">
-                <h4 className="scroll-m-20 text-xl font-medium tracking-tight">{project.client.name}</h4>
-                <p>{project.client.name}</p>
+                <h4 className="scroll-m-20 text-xl font-medium tracking-tight">{project.client?.name}</h4>
+                <p>{project.client?.name}</p>
               </div>
             </div>
 

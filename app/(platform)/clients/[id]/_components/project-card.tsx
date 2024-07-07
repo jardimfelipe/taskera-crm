@@ -4,7 +4,7 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { db } from '@/lib/db'
 
-import { ProjectsTable } from './projects-table'
+import { ProjectsTable, ProjectsTableSkeleton } from '../../../../../components/projects/projects-table'
 import { ProjectWithTasks } from '@/actions/projects/types'
 
 type Props = {
@@ -27,9 +27,19 @@ export const ProjectsCard = async ({ clientId }: Props) => {
         <CardTitle>Projetos</CardTitle>
       </CardHeader>
       <CardContent>
-
         <ProjectsTable projects={projects} />
       </CardContent>
     </Card>
   )
 }
+
+export const ProjectsCardSkeleton = () => (
+  <Card>
+    <CardHeader className="flex flex-row items-center gap-2">
+      <CardTitle>Projetos</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <ProjectsTableSkeleton />
+    </CardContent>
+  </Card>
+)

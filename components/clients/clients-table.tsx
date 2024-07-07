@@ -7,7 +7,8 @@ import Link from 'next/link';
 import React, { Suspense, useMemo } from 'react'
 
 import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/ui/data-table'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { DataTable, DataTableSkeleton } from '@/components/ui/data-table'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import { SearchInput } from '@/components/search-input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { DeleteClient } from './delete-client';
 
 type Props = {
@@ -62,3 +65,30 @@ export const ClientsTable = ({ clients }: Props) => {
     <DataTable columns={columns} data={clients} />
   )
 }
+
+
+export const ClientsTableSkeleton = () => (
+
+  <DataTableSkeleton columns={
+    [
+      {
+        accessorKey: "name",
+        header: "Nome",
+      },
+      {
+        accessorKey: "email",
+        header: "Email",
+      },
+      {
+        accessorKey: "phone",
+        header: "Telefone",
+      },
+      {
+        id: "actions",
+        cell: () => (
+          <Skeleton className="w-8 h-8" />
+        )
+      }
+    ]
+  } />
+)

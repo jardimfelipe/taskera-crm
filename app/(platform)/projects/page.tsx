@@ -3,32 +3,27 @@ import { currentUser } from '@/lib/auth';
 import { db } from '@/lib/db'
 import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react'
-import { ProjectsTable } from '../clients/[id]/_components/projects-card/projects-table';
+import { ProjectsTable, ProjectsTableSkeleton } from '../../../components/projects/projects-table';
+import { SearchInput } from '@/components/search-input';
+import { CreateClient } from '@/components/clients/create-client';
+import { CreateProject } from '@/components/projects/create-project';
+import { SearchParams } from '@/utils/type';
+import { ProjectsContent } from './_components/projects-content';
 
-const Projects = async () => {
-  const user = await currentUser();
-  if (!user) redirect("/")
-  const projects = await db.project.findMany(
-    {
-      where: { userId: user.id },
-      include: {
-        tasks: true,
-        client: true,
-      }
-    },
-  )
+const Projects = async ({ searchParams }: { searchParams: SearchParams }) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="p-4">
         <h4 className="scroll-m-20 text-xl font-medium tracking-tight">Meus Projetos</h4>
       </div>
-
       <Card>
         <CardHeader className='flex flex-row items-end gap-2'>
+          <SearchInput />
+          <CreateProject />
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<p>carregando...</p>}>
-            <ProjectsTable showClients projects={projects} />
+          <Suspense key={JSON.stringify(searchParams)} fallback={<ProjectsTableSkeleton showClients />}>
+            <ProjectsContent searchParams={searchParams} />
           </Suspense>
         </CardContent>
       </Card>

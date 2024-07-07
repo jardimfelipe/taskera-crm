@@ -1,5 +1,3 @@
-import { db } from '@/lib/db'
-import { redirect } from 'next/navigation'
 import React, { Suspense } from 'react'
 import { ProjectOverview } from './_components/project-overview'
 

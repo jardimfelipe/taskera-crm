@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Skeleton } from "./skeleton"
 
 
 interface DataTableProps<TData, TValue> {
@@ -22,7 +23,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -77,3 +78,46 @@ export function DataTable<TData, TValue>({
     </Table>
   )
 }
+
+const DataTableSkeleton = ({ columns }: { columns: DataTableProps<any, any>["columns"] }) => {
+  const table = useReactTable({
+    data: [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
+  return (
+    <Table>
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => {
+              return (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                </TableHead>
+              )
+            })}
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {new Array(5).fill(null).map((_, index) => (
+          <TableRow key={`skeleton-row-${index}`}>
+            {columns.map((_, index) => (
+              <TableCell key={`skeleton-cell-${index}`} className="h-16 text-center">
+                <Skeleton className="w-24 h-4 bg-gray-300 rounded-none" />
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
+export { DataTable, DataTableSkeleton }

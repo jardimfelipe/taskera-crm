@@ -7,7 +7,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-import { DeleteClient } from '../../../../_components/delete-client';
+import { DeleteClient } from './delete-client';
 
 type Props = {
   client: Client

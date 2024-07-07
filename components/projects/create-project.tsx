@@ -1,3 +1,5 @@
+"use client";
+
 import { File, Plus } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { withMask } from 'use-mask-input';

@@ -4,10 +4,8 @@ import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link';
 import React, { useMemo } from 'react'
 
-import { SearchInput } from '@/components/search-input';
-import { DataTable } from '@/components/ui/data-table'
+import { DataTable, DataTableSkeleton } from '@/components/ui/data-table'
 
-import { CreateProject } from '../create-project';
 import { centsToBrl } from '@/utils/currency';
 import { formatToPrint } from '@/utils/date';
 import { ProjectProgress } from './project-progress';
@@ -16,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
 import { ProjectWithTasks } from '@/actions/projects/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
   projects: ProjectWithTasks[]
@@ -27,7 +26,7 @@ export const ProjectsTable = ({ projects, showClients = false }: Props) => {
     ...(showClients ? [{
       accessorKey: 'client',
       header: 'Cliente',
-      cell: ({ row }) => (
+      cell: ({ row }: { row: any }) => (
         <div className="flex flex-row items-center gap-2">
           <Avatar>
             <AvatarFallback className="text-2xl">{row.original.client.name[0]}</AvatarFallback>
@@ -82,12 +81,48 @@ export const ProjectsTable = ({ projects, showClients = false }: Props) => {
 
   ], [])
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-row items-end gap-2">
-        <SearchInput />
-        <CreateProject />
-      </div>
-      <DataTable columns={columns} data={projects} />
-    </div>
+    <DataTable columns={columns} data={projects} />
   )
 }
+
+export const ProjectsTableSkeleton = ({ showClients = false }: { showClients?: Props["showClients"] }) => (
+
+  <DataTableSkeleton columns={
+    [
+      ...(showClients ? [{
+        accessorKey: 'client',
+        header: 'Cliente',
+      }] : []),
+      {
+        accessorKey: 'name',
+        header: 'Nome',
+      },
+      {
+        accessorKey: 'startAt',
+        header: 'Previsão de início',
+      },
+      {
+        accessorKey: 'endAt',
+        header: 'Previsão de término',
+      },
+      {
+        accessorKey: 'budget',
+        header: 'Orçamento',
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+      },
+      {
+        accessorKey: 'progress',
+        header: 'Progresso',
+      },
+      {
+        id: 'actions',
+        cell: () => (
+          <Skeleton className="w-8 h-8" />
+        )
+      },
+    ]
+  } />
+)
