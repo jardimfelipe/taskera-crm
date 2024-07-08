@@ -20,11 +20,12 @@ type Props = {
   id: string;
   name: string;
   error?: string[]
-  onChange: (client: Client) => void
   value: Client | null
+  disabled: boolean
+  onChange: (client: Client) => void
 }
 
-export const ClientSelect = ({ id, name: fieldName, error: fieldError, value, onChange }: Props) => {
+export const ClientSelect = ({ id, name: fieldName, error: fieldError, value, disabled, onChange }: Props) => {
   const [name, setName] = useState('')
   const [open, setOpen] = useState(false)
   const [debouncedValue, setValue] = useDebounceValue(name, 500)
@@ -54,6 +55,7 @@ export const ClientSelect = ({ id, name: fieldName, error: fieldError, value, on
           <Button
             variant="outline"
             role="combobox"
+            disabled={disabled}
             aria-expanded={open}
             aria-haspopup="listbox"
             aria-labelledby={id}
