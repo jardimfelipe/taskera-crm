@@ -12,11 +12,39 @@ import { Label } from '@/components/ui/label'
 import { LoadingButton } from '@/components/ui/loading-button';
 import { useToast } from '@/components/ui/use-toast';
 import { useAction } from '@/hooks/use-action'
+import { editClient } from '@/actions/clients/mutations/edit-client';
 
-export const CreateClient = () => {
+type Props = {
+  client?: Client;
+  trigger?: React.ReactNode;
+}
+
+export const ClientForm = ({ client, trigger }: Props) => {
   const { toast } = useToast()
   const route = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+
+  const isEditing = !!client
+  const actionText = isEditing ? "Editar" : "Criar"
+  const description = isEditing ? "Você pode alterar as informaçoes de seu cliente" : "Adicionando clientes, você poderá criar projetos e tarefas"
+
+  const { execute: edit, fieldErrors: el } = useAction(editClient, {
+    onSuccess: () => {
+      toast({
+        title: 'Sucesso',
+        description: 'O cliente foi editado com sucesso.',
+      })
+      setIsOpen(false)
+    },
+    onError: (error) => {
+      console.log(error)
+      toast({
+        title: 'Erro',
+        description: error,
+        variant: 'destructive'
+      })
+    },
+  })
 
   const { execute, fieldErrors } = useAction(createClient, {
     onSuccess: (client: Client) => {
@@ -41,20 +69,22 @@ export const CreateClient = () => {
       email: formData.get('email') as string,
       phone: formData.get('phone') as string,
     }
-    execute(rawFormData)
+    isEditing ? edit({ ...rawFormData, id: client.id }) : execute(rawFormData)
   }
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">
-          <Plus className="mr-2 w-5 h-5" />
-          Adicionar Cliente
-        </Button>
+        {
+          trigger || <Button size="sm">
+            <Plus className="mr-2 w-5 h-5" />
+            {actionText} Cliente
+          </Button>
+        }
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Adicionar Cliente</DialogTitle>
-          <DialogDescription>Adicionando clientes, você poderá criar projetos e tarefas</DialogDescription>
+          <DialogTitle>{actionText} Cliente</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <form action={onSubmit}>
           <div className="w-80 mb-4">
@@ -63,6 +93,7 @@ export const CreateClient = () => {
             </Label>
             <Input
               startIcon={<User className="w-5 h-5" />}
+              defaultValue={client?.name || ""}
               error={fieldErrors?.name}
               type="text"
               name="name"
@@ -76,6 +107,7 @@ export const CreateClient = () => {
               </Label>
               <Input
                 startIcon={<Mail className="w-5 h-5" />}
+                defaultValue={client?.email || ""}
                 error={fieldErrors?.email}
                 type="email"
                 name="email"
@@ -89,6 +121,7 @@ export const CreateClient = () => {
               </Label>
               <Input
                 startIcon={<Phone className="w-5 h-5" />}
+                defaultValue={client?.phone || ""}
                 error={fieldErrors?.phone}
                 type="text"
                 name="phone"
@@ -97,7 +130,9 @@ export const CreateClient = () => {
             </div>
           </div>
           <DialogFooter>
-            <LoadingButton type="submit" size="sm" className="mt-4">Adicionar cliente</LoadingButton>
+            <LoadingButton type="submit" size="sm" className="mt-4">
+              {actionText} Cliente
+            </LoadingButton>
           </DialogFooter>
         </form>
       </DialogContent >

@@ -8,7 +8,7 @@ import { SearchParams } from '@/utils/type'
 import { ClientsTableSkeleton } from '@/components/clients/clients-table'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { SearchInput } from '@/components/search-input'
-import { CreateClient } from '@/components/clients/create-client'
+import { ClientForm } from '@/components/clients/client-form'
 
 type Props = {
   searchParams: SearchParams
@@ -24,7 +24,7 @@ const Clients = async ({ searchParams }: Props) => {
       <Card>
         <CardHeader className='flex flex-row items-end gap-2'>
           <SearchInput />
-          <CreateClient />
+          <ClientForm />
         </CardHeader>
         <CardContent>
           <Suspense key={JSON.stringify(searchParams)} fallback={<ClientsTableSkeleton />}>

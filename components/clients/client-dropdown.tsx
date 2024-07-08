@@ -9,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 
 import { DeleteClient } from './delete-client';
 import { CreateProject } from '../projects/create-project';
+import { ClientForm } from './client-form';
 
 type Props = {
   client: Client
@@ -28,7 +29,9 @@ export default function ClientDropdown({ client }: Props) {
           client
         } />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Editar cliente</DropdownMenuItem>
+        <ClientForm client={client} trigger={
+          <span className='block cursor-pointer px-2 py-1.5 text-sm transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50' role="menuitem">Editar cliente</span>
+        } />
         <CreateProject client={client} trigger={
           <span className='cursor-pointer px-2 py-1.5 text-sm transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50' role="menuitem">Criar projeto</span>
         } />
