@@ -24,9 +24,9 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        'IN_PROGRESS': '#F59E0B', // blue-500
-        'PENDING': '#3B82F6', // light-blue-500
-        'COMPLETED': '#2ed47e', // green-500
+        'IN_PROGRESS': '#F59E0B', 
+        'PENDING': '#3B82F6', 
+        'COMPLETED': '#2ed47e', 
         'NOT_STARTED': 'hsl(var(--destructive))',
         primary: {
           DEFAULT: "hsl(var(--primary))",

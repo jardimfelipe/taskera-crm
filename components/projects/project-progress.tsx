@@ -1,21 +1,23 @@
 import React from 'react'
 
 import { Progress } from "@/components/ui/progress"
-import { ProjectWithTasks } from '@/actions/projects/types';
+import { CompleteProject, ProjectStatus } from '@/actions/projects/types';
+import { calculateProgress } from '@/utils/calculate-progress';
+import { Status } from '@prisma/client';
 
 type Props = {
-  project: ProjectWithTasks
+  project: CompleteProject
 }
 
-function getProjectStatusColor(status: string): string {
+function getProjectStatusColor(status: Status): string {
   switch (status) {
-    case 'IN_PROGRESS':
+    case ProjectStatus.IN_PROGRESS:
       return "bg-IN_PROGRESS";
-    case 'PENDING':
+    case ProjectStatus.PENDING:
       return "bg-PENDING";
-    case 'COMPLETED':
+    case ProjectStatus.COMPLETED:
       return "bg-COMPLETED";
-    case 'NOT_STARTED':
+    case ProjectStatus.NOT_STARTED:
       return "bg-NOT_STARTED";
     default:
       return "bg-NOT_STARTED"; // default color
@@ -23,9 +25,12 @@ function getProjectStatusColor(status: string): string {
 }
 
 export const ProjectProgress = ({ project }: Props) => {
-  const progress = Math.floor(Math.random() * 101);
+  const progress = calculateProgress(project.tasks);
 
   const progressColor = getProjectStatusColor(project.status);
+  if (!project.tasks.length) return (
+    <span className="text-muted-foreground">Crie tarefas e comece a ver seu progresso!</span>
+  )
   return (
     <div className="flex flex-row gap-2 items-center">
       <span className="text-muted-foreground">{progress}%</span>

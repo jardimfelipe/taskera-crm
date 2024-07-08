@@ -1,11 +1,7 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { currentUser } from '@/lib/auth';
-import { db } from '@/lib/db'
-import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react'
-import { ProjectsTable, ProjectsTableSkeleton } from '../../../components/projects/projects-table';
+import { ProjectsTableSkeleton } from '../../../components/projects/projects-table';
 import { SearchInput } from '@/components/search-input';
-import { CreateClient } from '@/components/clients/create-client';
 import { CreateProject } from '@/components/projects/create-project';
 import { SearchParams } from '@/utils/type';
 import { ProjectsContent } from './_components/projects-content';

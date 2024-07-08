@@ -5,7 +5,7 @@ import { currentUser } from "@/lib/auth";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
 
-import { CreateProject } from "./schema";
+import { CreateTask } from "./schema";
 import { InputType, ReturnType } from "./types";
 
 
@@ -18,34 +18,33 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  if(!data.clientId) {
+  if(!data.projectId) {
     return {
-      error: "Missing clientId",
+      error: "Missing projectId",
     }
   }
-  const found = await db.client.findFirst({
+  const found = await db.project.findFirst({
     where: {
-      id: data.clientId,
+      id: data.projectId,
     },
   });
 
   if (!found) {
     return {
-      error: "Client not found",
+      error: "Project not found",
     }
   }
-  let project;
-  const budget = parseFloat(data.budget.replace(',', '')) * 100;
+  let task;
   try {
-    project = await db.project.create({ data: {...data, userId: user.id as string, budget} });
+    task = await db.task.create({ data });
   } catch (error) {
   console.error(error)
   return {
       error: "Ocorreu um erro ao criar o cliente. Por favor, tente novamente.",
     };
   }
-  revalidatePath(`/clients/${data.clientId}`);
-  return {data: project}
+  revalidatePath(`/projects/${data.projectId}`);
+  return {data: task}
 };
 
-export const createProject = createSafeAction(CreateProject, handler);
+export const createTask = createSafeAction(CreateTask, handler);

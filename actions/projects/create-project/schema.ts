@@ -39,7 +39,13 @@ export const CreateProject = z.object({
       message: 'É necessário informar o orçamento'
     }),
 
-   clientId: z.string() 
+   clientId: z.string({
+    required_error: "É necessário informar o cliente",
+    invalid_type_error: "É necessário informar o cliente",
+  })
+    .min(1, {
+      message: 'É necessário informar o cliente'
+    }),
 }) 
  .refine((data) => data.endAt > data.startAt, {
   message: "A estimativa de término não pode ser anterior à data de início",

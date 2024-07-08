@@ -29,8 +29,8 @@ export const ProjectsContent = async ({ searchParams }: Props) => {
         tasks: true,
         client: true,
       },
-      take: 10,
-      skip: (page - 1) * 10,
+      take: pageSize,
+      skip: (page - 1) * pageSize,
     },
   )
 

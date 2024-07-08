@@ -58,6 +58,10 @@ model Account {
 model Task {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
+  status    Status   @default(NOT_STARTED)
+  startAt   DateTime
+  endAt     DateTime
+  createdAt DateTime @default(now())
   Project   Project? @relation(fields: [projectId], references: [id])
   projectId String?  @db.ObjectId
 }

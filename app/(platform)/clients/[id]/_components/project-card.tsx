@@ -5,19 +5,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { db } from '@/lib/db'
 
 import { ProjectsTable, ProjectsTableSkeleton } from '../../../../../components/projects/projects-table'
-import { ProjectWithTasks } from '@/actions/projects/types'
+import { CompleteProject } from '@/actions/projects/types'
 
 type Props = {
   clientId: string
 }
 
 export const ProjectsCard = async ({ clientId }: Props) => {
-  const projects: ProjectWithTasks[] = await db.project.findMany({
+  const projects: CompleteProject[] = await db.project.findMany({
     where: {
       clientId,
     },
     include: {
       tasks: true,
+      client: true
     }
   })
   if (!projects) return null

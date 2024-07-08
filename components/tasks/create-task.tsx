@@ -2,7 +2,6 @@
 
 import { File, Plus } from 'lucide-react'
 import React, { useRef, useState } from 'react'
-import { withMask } from 'use-mask-input';
 
 import { ProjectStatus, ProjectStatusColor } from '@/actions/projects/types'
 import { Button } from '@/components/ui/button'
@@ -11,22 +10,16 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoadingButton } from '@/components/ui/loading-button';
-import { editorProps, extensions, RichTextEditor } from '@/components/ui/rich-text-editor'
+import { editorProps, extensions } from '@/components/ui/rich-text-editor'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useAction } from '@/hooks/use-action';
-import { createProject } from '@/actions/projects/create-project';
-import { Client, Project } from '@prisma/client';
+import { Task } from '@prisma/client';
 import { useToast } from '@/components/ui/use-toast';
 import { useParams } from 'next/navigation';
 import { useEditor } from '@tiptap/react';
-import { ClientSelect } from '../clients/client-select';
+import { createTask } from '@/actions/tasks/create-task';
 
-type Props = {
-  trigger?: React.ReactNode
-  client?: Client | null
-}
-
-export const CreateProject = ({ trigger, client: customClient = null }: Props) => {
+export const CreateTask = () => {
   const ref = useRef<HTMLFormElement>(null)
 
   const { toast } = useToast()
@@ -37,11 +30,11 @@ export const CreateProject = ({ trigger, client: customClient = null }: Props) =
   })
 
 
-  const { execute, fieldErrors } = useAction(createProject, {
-    onSuccess: (project: Project) => {
+  const { execute, fieldErrors } = useAction(createTask, {
+    onSuccess: (task: Task) => {
       toast({
         title: 'Sucesso',
-        description: `Projeto ${project.name} criado com sucesso`,
+        description: `Tarefa ${task.name} criada com sucesso`,
       })
       handleDialogChange(false)
     },
@@ -59,17 +52,12 @@ export const CreateProject = ({ trigger, client: customClient = null }: Props) =
     startAt: undefined,
     endAt: undefined
   })
-  const [client, setClient] = useState<Client | null>(customClient)
 
   const handleDateChange = (field: string, value: Date | undefined) => {
     setFormDates({
       ...formDates,
       [field]: value
     })
-  }
-
-  const handleClientChange = (client: Client) => {
-    setClient(client)
   }
 
   const handleDialogChange = (status: boolean) => {
@@ -82,12 +70,10 @@ export const CreateProject = ({ trigger, client: customClient = null }: Props) =
   const onSubmit = (formData: FormData) => {
     const rawFormData = {
       name: formData.get('name') as string,
-      budget: formData.get('budget') as string,
       startAt: formDates.startAt as unknown as Date,
       endAt: formDates.endAt as unknown as Date,
       status: formData.get('status') as ProjectStatus,
-      description: editor?.getHTML() as string,
-      clientId: client?.id as string
+      projectId: params.id as string
     }
     execute(rawFormData)
   }
@@ -95,23 +81,21 @@ export const CreateProject = ({ trigger, client: customClient = null }: Props) =
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
-        {trigger ? trigger : (
-          <Button size="sm">
-            <Plus className="mr-2 w-5 h-5" />
-            Adicionar Projeto
-          </Button>
-        )}
+        <Button size="sm">
+          <Plus className="mr-2 w-5 h-5" />
+          Adicionar Tarefa
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl">
         <form ref={ref} action={onSubmit}>
           <DialogHeader>
-            <DialogTitle>Adicionar Projeto</DialogTitle>
-            <DialogDescription>Crie e acompanhe seus projetos</DialogDescription>
+            <DialogTitle>Adicionar Tarefa</DialogTitle>
+            <DialogDescription>Adicione e acompanhe suas tarefas</DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4">
 
             <div className="flex gap-4">
-              <div className="flex-1">
+              <div className="w-[300px]">
                 <Label htmlFor="name">
                   Nome
                 </Label>
@@ -123,40 +107,18 @@ export const CreateProject = ({ trigger, client: customClient = null }: Props) =
                   id="name"
                 />
               </div>
-
-              <div className="flex-1">
-                <Label htmlFor="budget">
-                  Orçamento
-                </Label>
-                <Input
-                  ref={withMask("currency", {
-                    prefix: "",
-                    rightAlign: false,
-                  })}
-                  error={fieldErrors?.budget}
-                  type="text"
-                  name="budget"
-                  id="budget"
-                />
-              </div>
-
-              <div className="flex-1 flex flex-col gap-2">
-                <Label htmlFor='client'>Cliente</Label>
-                <ClientSelect onChange={handleClientChange} value={client} id="client" name="client" error={fieldErrors?.clientId} />
-                <input type="hidden" name="client" id="client" value={formDates.startAt} />
-              </div>
             </div>
 
             <div className="flex gap-4">
               <div className='flex-1 flex flex-col gap-2'>
-                <Label htmlFor="startAt">
+                <Label htmlFor="email">
                   Data de início
                 </Label>
                 <DatePicker error={fieldErrors?.startAt} value={formDates.startAt} onChange={(value) => handleDateChange('startAt', value)} />
                 <input type="hidden" name="startAt" id="startAt" value={formDates.startAt} />
               </div>
               <div className='flex-1 flex flex-col gap-2'>
-                <Label htmlFor="EndAt">
+                <Label htmlFor="phone">
                   Date de término
                 </Label>
                 <DatePicker error={fieldErrors?.endAt} value={formDates.endAt} onChange={(value) => handleDateChange('endAt', value)} />
@@ -182,17 +144,9 @@ export const CreateProject = ({ trigger, client: customClient = null }: Props) =
                 </Select>
               </div>
             </div>
-
-            <div>
-              <Label htmlFor="description">
-                Descriçao
-              </Label>
-              <RichTextEditor editor={editor} error={fieldErrors?.description} />
-              <input value={editor?.getHTML()} type="hidden" name="description" id="description" />
-            </div>
           </div>
           <DialogFooter>
-            <LoadingButton type="submit" size="sm" className="mt-4">Adicionar projeto</LoadingButton>
+            <LoadingButton type="submit" size="sm" className="mt-4">Adicionar tarefa</LoadingButton>
           </DialogFooter>
         </form>
       </DialogContent >

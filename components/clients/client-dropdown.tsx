@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 import { DeleteClient } from './delete-client';
+import { CreateProject } from '../projects/create-project';
 
 type Props = {
   client: Client
@@ -28,7 +29,9 @@ export default function ClientDropdown({ client }: Props) {
         } />
         <DropdownMenuSeparator />
         <DropdownMenuItem>Editar cliente</DropdownMenuItem>
-        <DropdownMenuItem>Criar projeto</DropdownMenuItem>
+        <CreateProject client={client} trigger={
+          <span className='cursor-pointer px-2 py-1.5 text-sm transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50' role="menuitem">Criar projeto</span>
+        } />
       </DropdownMenuContent>
     </DropdownMenu>
   )

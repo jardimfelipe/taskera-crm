@@ -56,7 +56,6 @@ export const ClientsTable = ({ clients }: Props) => {
             } />
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild><Link href={`clients/${row.original.id}`}>Ver detalhes</Link></DropdownMenuItem>
-            <DropdownMenuItem>Ver projetos</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>)
     }

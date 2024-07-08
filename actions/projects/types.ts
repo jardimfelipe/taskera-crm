@@ -1,7 +1,8 @@
-import {  Project, Task } from "@prisma/client";
+import {  Client, Project, Task } from "@prisma/client";
 
-export interface ProjectWithTasks extends Project {
+export interface CompleteProject extends Project {
   tasks: Task[]
+  client: Client | null
 }
 
 export enum ProjectStatus {

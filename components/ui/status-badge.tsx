@@ -36,7 +36,7 @@ function getProjectStatusBackground(status: string): string {
   }
 }
 
-export const ProjectStatusBadge = ({ status }: Props) => {
+export const StatusBadge = ({ status }: Props) => {
   return (
     <span className={`inline-flex items-center px-2.5 py-1.5 text-xs font-medium ${getProjectStatusColor(status)} ${getProjectStatusBackground(status)}`}>
       {ProjectStatusName[status]}

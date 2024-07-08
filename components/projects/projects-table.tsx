@@ -9,20 +9,20 @@ import { DataTable, DataTableSkeleton } from '@/components/ui/data-table'
 import { centsToBrl } from '@/utils/currency';
 import { formatToPrint } from '@/utils/date';
 import { ProjectProgress } from './project-progress';
-import { ProjectStatusBadge } from './project-status-badge';
 import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
-import { ProjectWithTasks } from '@/actions/projects/types';
+import { CompleteProject } from '@/actions/projects/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { StatusBadge } from '../ui/status-badge';
 
 type Props = {
-  projects: ProjectWithTasks[]
+  projects: CompleteProject[]
   showClients?: boolean
 }
 
 export const ProjectsTable = ({ projects, showClients = false }: Props) => {
-  const columns: ColumnDef<ProjectWithTasks>[] = useMemo(() => [
+  const columns: ColumnDef<CompleteProject>[] = useMemo(() => [
     ...(showClients ? [{
       accessorKey: 'client',
       header: 'Cliente',
@@ -59,7 +59,7 @@ export const ProjectsTable = ({ projects, showClients = false }: Props) => {
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ({ row }) => <ProjectStatusBadge status={row.original.status} />,
+      cell: ({ row }) => <StatusBadge status={row.original.status} />,
     },
     {
       accessorKey: 'progress',
